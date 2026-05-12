@@ -38,4 +38,19 @@ Elements with `[data-reveal]` start hidden (`opacity: 0; transform: translateY(2
 
 ## Contact Form
 
-The form in `#contact` simulates submission with a timeout — there is no backend. To wire up a real endpoint, replace the `setTimeout` block in `script.js` around the `contactForm` submit handler.
+Submissions are sent via **EmailJS** (SDK loaded from CDN in `index.html`). Config constants sit at the top of `script.js`:
+
+```js
+const EMAILJS_SERVICE  = 'matcro_honeypot';
+const EMAILJS_TEMPLATE = 'template_sgnlh0s';
+```
+
+The form uses `emailjs.sendForm()` which maps `name` attributes directly to template variables — `from_name`, `from_email`, and `message`.
+
+**Bot protection:** A honeypot `<input name="website">` is hidden via `.honey` in `style.css`. If it contains any value on submit, the request is silently dropped before EmailJS is called.
+
+## Backlog
+
+Upcoming features are tracked in `backlog.md`. Current items:
+- **Confirmation email** — auto-reply to submitter via a second EmailJS template
+- **Lightweight CRM** — write leads to Airtable via a Cloudflare Worker proxy (to avoid exposing the API token client-side)
