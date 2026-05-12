@@ -1,3 +1,9 @@
+/* ─── EMAILJS ────────────────────────────────────────────────── */
+emailjs.init({ publicKey: 'E0LFyZ0Mh338G8QID' });
+
+const EMAILJS_SERVICE  = 'matcro_honeypot';
+const EMAILJS_TEMPLATE = 'template_sgnlh0s';
+
 /* ─── NAV SCROLL STATE ──────────────────────────────────────── */
 const nav = document.getElementById('nav');
 
@@ -82,16 +88,26 @@ contactForm?.addEventListener('submit', (e) => {
 
   if (!valid) return;
 
-  // Simulate submission
+  // Honeypot check — bots fill the hidden field, humans never see it
+  const honeypot = contactForm.querySelector('#website');
+  if (honeypot && honeypot.value) return;
+
   const btn = contactForm.querySelector('.btn-primary');
   const btnText = btn.querySelector('.btn-text');
   btnText.textContent = 'Sending…';
   btn.disabled = true;
 
-  setTimeout(() => {
-    contactForm.classList.add('hidden');
-    formSuccess.classList.add('visible');
-  }, 800);
+  emailjs.sendForm(EMAILJS_SERVICE, EMAILJS_TEMPLATE, contactForm)
+    .then(() => {
+      contactForm.classList.add('hidden');
+      formSuccess.classList.add('visible');
+    })
+    .catch(() => {
+      btnText.textContent = 'Send Message';
+      btn.disabled = false;
+      btn.style.outline = '2px solid #ff4d4d';
+      btn.title = 'Something went wrong — please try again.';
+    });
 });
 
 /* ─── SMOOTH ANCHOR SCROLLING ───────────────────────────────── */

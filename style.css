@@ -712,6 +712,18 @@ h1, h2, h3, h4 {
   color: var(--text-dim);
 }
 
+/* ─── HONEYPOT ───────────────────────────────────────────────── */
+.honey {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  tabindex: -1;
+}
+
 /* ─── RESPONSIVE ─────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .services-grid {
